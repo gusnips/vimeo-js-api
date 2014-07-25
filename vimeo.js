@@ -45,7 +45,7 @@
         /*
          * Calls a function to act upon the player.
          *
-         * @param {string} method The name of the Javascript API method to call. Eg: 'play'.
+         * @param {String} method The name of the Javascript API method to call. Eg: 'play'.
          * @param {Array|Function} valueOrCallback params Array of parameters to pass when calling an API method
          *                                or callback function when the method returns a value.
          */
@@ -69,13 +69,18 @@
             postMessage(method, params, element);
             return self;
         },
-        /**
-         * load a new vimeo video
-         * untested and undocumented for now
+
+        /*
+         * Calls a function to act upon the player.
+         *
+         * @param {String} url: The new video url to load. Should be the whole src part including domain
+         * @param {Function} callback: Function that should be called when the new video is ready.
          */
         load: function(url, callback){
             if (!this.element)
                 return false;
+            var target_id = !this.element.id ? DEFAULT_EL : this.element.id;
+            isReady[target_id]=false;
             this.element.src=url;
             if(callback)
                 this.addEvent('ready',callback);
@@ -83,8 +88,8 @@
         /*
          * Registers an event listener and a callback function that gets called when the event fires.
          *
-         * @param eventName (String): Name of the event to listen for.
-         * @param callback (Function): Function that should be called when the event fires.
+         * @param {String} eventName: Name of the event to listen for.
+         * @param {Function} callback: Function that should be called when the event fires.
          */
         addEvent: function(eventName, callback) {
             if (!this.element)
@@ -204,9 +209,11 @@
             params = [];
 
         if (method == 'ready'){
-            if(!isReady[target_id])
+            if(!isReady[target_id]){
                 isReady[target_id]=true;
-            else
+                //we dont want these events anymore after reload
+                removeCallback(method, target_id);
+            }else
                 return false;
         }
 
