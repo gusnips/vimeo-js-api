@@ -50,8 +50,6 @@
          *                                or callback function when the method returns a value.
          */
         api: function(method, valueOrCallback) {
-            if(method==='setVolume' && typeof valueOrCallback === 'undefined')
-                valueOrCallback=0.5;
             if (!this.element || !method)
                 return false;
 
@@ -71,7 +69,13 @@
             postMessage(method, params, element);
             return self;
         },
-
+        load: function(url, callback){
+            if (!this.element)
+                return false;
+            this.element.src=url;
+            if(callback)
+                this.addEvent('ready',callback);
+        },
         /*
          * Registers an event listener and a callback function that gets called when the event fires.
          *
@@ -79,9 +83,8 @@
          * @param callback (Function): Function that should be called when the event fires.
          */
         addEvent: function(eventName, callback) {
-            if (!this.element) {
+            if (!this.element)
                 return false;
-            }
 
             var self = this,
                 element = self.element,
@@ -130,27 +133,19 @@
         'getVideoHeight','getVideoUrl','getVideoEmbedCode'
     ];
 
-    var methodsLength=methods.length;
-    for(var x=0;x<methodsLength;x++){
-        Vimeo.fn[methods[x]]=(function(methodName){
-            return function(valueOrCallback){
-                return this.api(methodName,valueOrCallback);
-            }
-        })(methods[x]);
-    }
-    var eventsLength=events.length;
-    for(var y=0;y<eventsLength;y++){
-        Vimeo.fn['on'+ucfirst(events[y])]=(function(eventName){
-            return function(callback){
-                return this.addEvent(eventName,callback);
-            }
-        })(events[x]);
-        Vimeo.fn['off'+ucfirst(events[y])]=(function(eventName){
-            return function(callback){
-                return this.removeEvent(eventName,callback);
-            }
-        })(events[x]);
-    }
+    methods.forEach(function(methodName, x, methods){
+        Vimeo.fn[methodName]=function(valueOrCallback){
+            return this.api(methodName,valueOrCallback);
+        }
+    });
+    events.forEach(function(eventName, y, events){
+        Vimeo.fn['on'+ucfirst(eventName)]=function(callback){
+            return this.addEvent(eventName,callback);
+        }
+        Vimeo.fn['off'+ucfirst(eventName)]=function(callback){
+            return this.removeEvent(eventName,callback);
+        }
+    });
 
     /**
      * Handles posting a message to the parent window.
