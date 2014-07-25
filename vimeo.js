@@ -50,6 +50,9 @@
          *                                or callback function when the method returns a value.
          */
         api: function(method, valueOrCallback) {
+            console.trace(method,valueOrCallback);
+            if(method==='setVolume' && typeof valueOrCallback === 'undefined')
+                valueOrCallback=0.5;
             if (!this.element || !method)
                 return false;
 
@@ -128,21 +131,26 @@
         'getVideoHeight','getVideoUrl','getVideoEmbedCode'
     ];
 
-    for(var x in methods){
-        Vimeo.fn[methods[x]]=function(){
-            arguments.unshift(methods[x]);
-            return this.api.apply(this,arguments);
-        }
+    var methodsLength=methods.length;
+    for(var x=0;x<methodsLength;x++){
+        Vimeo.fn[methods[x]]=(function(methodName){
+            return function(valueOrCallback){
+                return this.api(methodName,valueOrCallback);
+            }
+        })(methods[x]);
     }
-    for(var x in events){
-        Vimeo.fn['on'+ucfirst(events[x])]=function(callback){
-            arguments.unshift(events[x]);
-            return this.addEvent.apply(this,arguments);
-        }
-        Vimeo.fn['off'+ucfirst(events[x])]=function(callback){
-            arguments.unshift(events[x]);
-            return this.removeEvent.apply(this,arguments);
-        }
+    var eventsLength=events.length;
+    for(var y=0;y<eventsLength;y++){
+        Vimeo.fn['on'+ucfirst(events[y])]=(function(eventName){
+            return function(callback){
+                return this.addEvent(eventName,callback);
+            }
+        })(events[x]);
+        Vimeo.fn['off'+ucfirst(events[y])]=(function(eventName){
+            return function(callback){
+                return this.removeEvent(eventName,callback);
+            }
+        })(events[x]);
     }
 
     /**
