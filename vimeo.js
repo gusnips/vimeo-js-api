@@ -37,7 +37,7 @@
             this.element = iframe;
 
             // Register message event listeners
-            if(iframe)
+            if(this.element)
                 playerDomain = getDomainFromUrl(this.element.getAttribute('src'));
             return this;
         },
@@ -283,9 +283,11 @@
      * @return url (String): Root domain of submitted url
      */
     function getDomainFromUrl(url) {
-        if (url.substr(0, 2) === '//') {
+        if(!url)
+            return;
+
+        if (url.substr(0, 2) === '//')
             url = window.location.protocol + url;
-        }
 
         var url_pieces = url.split('/'),
             domain_str = '';
