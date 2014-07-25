@@ -50,7 +50,6 @@
          *                                or callback function when the method returns a value.
          */
         api: function(method, valueOrCallback) {
-            console.trace(method,valueOrCallback);
             if(method==='setVolume' && typeof valueOrCallback === 'undefined')
                 valueOrCallback=0.5;
             if (!this.element || !method)
