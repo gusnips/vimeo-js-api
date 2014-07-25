@@ -209,7 +209,7 @@ api.addEvent('ready',weAreReadyCallback);
 api.removeEvent('ready');
 ```
 
-+ 'play' Trigger whenever the user or you via api play the video
++ `play` Trigger whenever the user or you via api play the video
 
 ```js
 api.onPlay(function(event) {
@@ -220,7 +220,7 @@ api.addEvent('play',doSomethingWhenPlay);
 api.removeEvent('pause');
 ```
 
-+ 'pause' Trigger whenever the user or you via api pause the video
++ `pause` Trigger whenever the user or you via api pause the video
 
 ```js
 api.onPause(function(event) {
@@ -231,7 +231,7 @@ api.addEvent('pause',doSomethingWhenPauseFunction);
 api.removeEvent('pause');
 ```
 
-+ 'finish' Trigger when video ends
++ `finish` Trigger when video ends
 
 ```js
 api.onFinish(function(event) {
@@ -242,7 +242,7 @@ api.addEvent('finish',onFinishCallback);
 api.removeEvent('finish');
 ```
 
-+ 'seek' _Object_ {seconds: _Float_, duration: _Float_, percent: _Float_} Trigger when seek has changed.
++ `seek` _Object_ {seconds: _Float_, duration: _Float_, percent: _Float_} Trigger when seek has changed.
 
 ```js
 api.onSeek(function(event) {
@@ -256,7 +256,7 @@ api.addEvent('playProgress',onPlayProgressCallback)
 api.removeEvent('playProgress');
 ```
 
-+ 'playProgress' _Object_ {seconds: _Float_, duration: _Float_, percent: _Float_} Trigger while playing, a few times per second.
++ `playProgress` _Object_ {seconds: _Float_, duration: _Float_, percent: _Float_} Trigger while playing, a few times per second.
 
 ```js
 api.onPlayProgress(function(event) {
@@ -270,7 +270,7 @@ api.addEvent('playProgress',onPlayProgressCallback)
 api.removeEvent('playProgress');
 ```
 
-+ 'loadProgress' _Object_ {bytesTotal: _Float_, bytesTotal: _Float_, duration: _Float_, percent: _Float_} Trigger while loading, a few times per second.
++ `loadProgress` _Object_ {bytesTotal: _Float_, bytesTotal: _Float_, duration: _Float_, percent: _Float_} Trigger while loading, a few times per second.
 
 ```js
 api.onLoadProgress(function(event) {
