@@ -23,7 +23,7 @@
         playerDomain= '';
 
     //we define some alias methods for compatibility
-    var methodAliasMap={stop: 'unload'};
+    var methodAliasMap={stop: 'unload', seek: 'seekTo'};
 
     Vimeo.fn = Vimeo.prototype = {
         element: null,
