@@ -17,24 +17,26 @@ For more info about embeding, [see vimeo's embeding page](https://developer.vime
 var api=$f('myplayer'); //or new Vimeo('myplayer') 
 ```
 
-
-
 ## Usage
 
 instantiate via element
 ```js
 var element=document.getElementById('myVimeoIframe');
 var api=$f(element);
-//or (alias of)
+//alias of
 var api=new Vimeo(element);
 ```
 
 or via iframe id
 ```js
 var api=$f('myVimeoIframe');
-//or (alias of)
+//alias of
 var api=new Vimeo('myVimeoIframe');
 ```
+
+## Troubleshooting
+
++ `ready event firing more than once` Be sure that the embed code url contains the player ID
 
 ## Methods
 
@@ -42,7 +44,7 @@ Example of use:
 ```js
 var myVideo=$f('myVimeoIframeID');
 myVideo.play();
-//or (alias of)
+//alias of
 myVideo.api('play');
 ```
 
@@ -51,7 +53,7 @@ Using arguments:
 var myVideo=$f(document.getElementById('playerID'));
 //from the start, 0 seconds
 myVideo.seekTo(0);
-//or (alias of)
+//alias of
 myVideo.api('seekTo',0);
 ```
 
@@ -193,7 +195,7 @@ Example of use:
 ```js
 var myVideo=$f('myVimeoIframeID');
 myVideo.onPlay();
-//or (alias of)
+//alias of
 myVideo.addEvent('play',function(event){
   console.log('Ok, we are live!');
 });
@@ -205,7 +207,7 @@ myVideo.addEvent('play',function(event){
 api.onPause(function(event) {
   console.log('Video is now ready to play ... rock\'n roll!',event);
 });
-//or (alias of)
+//alias of
 api.addEvent('ready',weAreReadyCallback);
 api.removeEvent('ready');
 ```
@@ -216,7 +218,7 @@ api.removeEvent('ready');
 api.onPlay(function(event) {
   console.log('Video is now playing  ... enjoy!',event);
 });
-//or (alias of)
+//alias of
 api.addEvent('play',doSomethingWhenPlay);
 api.removeEvent('pause');
 ```
@@ -227,7 +229,7 @@ api.removeEvent('pause');
 api.onPause(function(event) {
   console.log('Video is pause ... take a break!',event);
 });
-//or (alias of)
+//alias of
 api.addEvent('pause',doSomethingWhenPauseFunction);
 api.removeEvent('pause');
 ```
@@ -238,7 +240,7 @@ api.removeEvent('pause');
 api.onFinish(function(event) {
   console.log('Video ended ... what should we do now?',event);
 });
-//or (alias of)
+//alias of
 api.addEvent('finish',onFinishCallback);
 api.removeEvent('finish');
 ```
@@ -252,7 +254,7 @@ api.onSeek(function(event) {
     'it is now at '+(event.percent*100)+'%'
   );
 });
-//or (alias of)
+//alias of
 api.addEvent('playProgress',onPlayProgressCallback)
 api.removeEvent('playProgress');
 ```
@@ -266,7 +268,7 @@ api.onPlayProgress(function(event) {
     (event.percent*100)+'% already played'
   );
 });
-//or (alias of)
+//alias of
 api.addEvent('playProgress',onPlayProgressCallback)
 api.removeEvent('playProgress');
 ```
@@ -281,7 +283,7 @@ api.onLoadProgress(function(event) {
     'Video duration is  '+event.duration+' seconds'
   );
 });
-//or (alias of)
+//alias of
 api.addEvent('loadProgress',onLoadProgressCallback);
 api.removeEvent('loadProgress');
 ```
