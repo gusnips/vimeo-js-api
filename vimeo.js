@@ -69,6 +69,10 @@
             postMessage(method, params, element);
             return self;
         },
+        /**
+         * load a new vimeo video
+         * untested and undocumented for now
+         */
         load: function(url, callback){
             if (!this.element)
                 return false;
@@ -126,11 +130,12 @@
 
     var events=['ready','play','pause','seek','finish','playProgress','loadProgress'];
     var methods=[
-        'play','pause','stop','unload','seekTo','paused',
+        'play','pause','unload','seekTo','paused',
         'setVolume','setLoop','setColor',
         'getVolume','getLoop','getColor',
         'getCurrentTime','getDuration','getVideoWidth',
-        'getVideoHeight','getVideoUrl','getVideoEmbedCode'
+        'getVideoHeight','getVideoUrl','getVideoEmbedCode',
+        'seek','stop',
     ];
 
     methods.forEach(function(methodName, x, methods){
