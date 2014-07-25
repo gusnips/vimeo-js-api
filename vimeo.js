@@ -191,7 +191,6 @@
         } catch(e) {
             console.log(e);
         }
-        console.log(method, data);
 
         // Handles messages from moogaloop only
         if (event.origin != playerDomain)
