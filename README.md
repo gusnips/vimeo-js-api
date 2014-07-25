@@ -10,6 +10,7 @@ Embed the video to your page:
 ```html
 <iframe id="myplayer" src="//player.vimeo.com/video/VIDEO_ID?player_id=myplayer&api=1" width="100%" height="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 ```
+Do not forget api=1 and to set the right iframe id on player_id=`myplayer`  
 For more info about embeding, [see vimeo's embeding page](https://developer.vimeo.com/player/embedding)
 
 ```js
