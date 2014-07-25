@@ -12,22 +12,23 @@
 		factory( global );
 	}
 })(typeof window !== "undefined" ? window : this, function(window, noGlobal){
+
+    var DEFAULT_EL='!';
+    var eventCallbacks= {},
+        slice= Array.prototype.slice,
+        playerDomain= '',
+        isReady={};
+
+    //we define some alias methods for compatibility
+    var methodAliasMap={stop: 'unload', seek: 'seekTo'};
+
     // Define a local copy of Vimeo
     function Vimeo(iframe) {
         // The Vimeo object is actually just the init constructor
         return new Vimeo.fn.init(iframe);
     }
-
-    var eventCallbacks= {},
-        slice= Array.prototype.slice,
-        playerDomain= '';
-
-    //we define some alias methods for compatibility
-    var methodAliasMap={stop: 'unload', seek: 'seekTo'};
-
     Vimeo.fn = Vimeo.prototype = {
         element: null,
-        isReady: false,
 
         init: function(iframe) {
             if (typeof iframe === "string")
@@ -38,7 +39,6 @@
             // Register message event listeners
             if(iframe)
                 playerDomain = getDomainFromUrl(this.element.getAttribute('src'));
-
             return this;
         },
 
@@ -55,7 +55,7 @@
 
             var self = this,
                 element = self.element,
-                target_id = element.id !== '' ? element.id : null,
+                target_id = !element.id ? DEFAULT_EL : element.id,
                 params = !isFunction(valueOrCallback) ? valueOrCallback : null,
                 callback = isFunction(valueOrCallback) ? valueOrCallback : null;
 
@@ -92,7 +92,7 @@
 
             var self = this,
                 element = self.element,
-                target_id = element.id !== '' ? element.id : null;
+                target_id = !element.id ? DEFAULT_EL : element.id;
 
 
             storeCallback(eventName, callback, target_id);
@@ -100,7 +100,7 @@
             // The ready event is not registered via postMessage. It fires regardless.
             if (eventName != 'ready') {
                 postMessage('addEventListener', eventName, element);
-            } else if (eventName == 'ready' && this.isReady) {
+            } else if (eventName == 'ready' && isReady[target_id]) {
                 callback.call(null, target_id);
             }
 
@@ -118,7 +118,7 @@
 
             var self = this,
                 element = self.element,
-                target_id = element.id !== '' ? element.id : null,
+                target_id = !element.id ? DEFAULT_EL : element.id,
                 removed = removeCallback(eventName, target_id);
 
             // The ready event is not registered
@@ -135,7 +135,7 @@
         'getVolume','getLoop','getColor',
         'getCurrentTime','getDuration','getVideoWidth',
         'getVideoHeight','getVideoUrl','getVideoEmbedCode',
-        'seek','stop',
+        'seek','stop'
     ];
 
     methods.forEach(function(methodName, x, methods){
@@ -191,9 +191,7 @@
         } catch(e) {
             console.log(e);
         }
-
-        if (method == 'ready' && !this.isReady)
-            this.isReady = true;
+        console.log(method, data);
 
         // Handles messages from moogaloop only
         if (event.origin != playerDomain)
@@ -201,10 +199,17 @@
 
         var value = data.value,
             eventData = data.data,
-            target_id = target_id === '' ? null : data.player_id,
+            target_id = !data.player_id ? DEFAULT_EL : data.player_id,
 
             callback = getCallback(method, target_id),
             params = [];
+
+        if (method == 'ready'){
+            if(!isReady[target_id])
+                isReady[target_id]=true;
+            else
+                return false;
+        }
 
         if (!callback)
             return false;
@@ -234,7 +239,7 @@
      * id.
      */
     function storeCallback(eventName, callback, target_id) {
-        if (target_id) {
+        if (target_id && target_id!==DEFAULT_EL) {
             if (!eventCallbacks[target_id])
                 eventCallbacks[target_id] = {};
             eventCallbacks[target_id][eventName] = callback;
@@ -247,7 +252,7 @@
      * Retrieves stored callbacks.
      */
     function getCallback(eventName, target_id) {
-        if (target_id) {
+        if (target_id && target_id!==DEFAULT_EL) {
             if(!eventCallbacks[target_id])
                 return;
             return eventCallbacks[target_id][eventName];
@@ -257,12 +262,11 @@
     }
 
     function removeCallback(eventName, target_id) {
-        if (target_id && eventCallbacks[target_id]) {
-            if (!eventCallbacks[target_id][eventName])
+        if (target_id && target_id!==DEFAULT_EL) {
+            if (!eventCallbacks[target_id] || !eventCallbacks[target_id][eventName])
                 return false;
             eventCallbacks[target_id][eventName] = null;
-        }
-        else {
+        } else {
             if (!eventCallbacks[eventName]) {
                 return false;
             }
